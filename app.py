@@ -1,5 +1,10 @@
+"""
+Personal PDF Chatbot - RAG pipeline using Google Gemini
+Usage: python app.py /path/to/your/file.pdf
+"""
 
 import os
+import sys
 from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -11,7 +16,11 @@ from langchain_core.output_parsers import StrOutputParser
 
 load_dotenv()  # expects GOOGLE_API_KEY in .env
 
-PDF_PATH = '/Users/saranshsingh8888icloud.com/Desktop/saransh/untitled folder/saranshD.pdf'
+if len(sys.argv) < 2:
+    print("Usage: python app.py /path/to/your/file.pdf")
+    sys.exit(1)
+
+PDF_PATH = sys.argv[1]
 PERSIST_DIR = "chroma_db"
 
 

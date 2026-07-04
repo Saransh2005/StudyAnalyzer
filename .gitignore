@@ -1,0 +1,17 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# ChromaDB (local vector store, no need to push)
+chroma_db/
+
+# Environment variables (keep your API key secret!)
+.env
+
+# PDF files (personal data)
+*.pdf
+
+# OS
+.DS_Store

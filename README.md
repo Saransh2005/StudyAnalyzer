@@ -1,78 +1,119 @@
-# StudyAnalyzer — PDF Chatbot (RAG + Gemini)
+# StudyAnalyzer — AI-Powered PDF Chatbot (RAG + Google Gemini)
 
-An AI-powered PDF question-answering chatbot built with a **Retrieval-Augmented Generation (RAG)** pipeline using **Google Gemini** and **ChromaDB**.
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![LangChain](https://img.shields.io/badge/LangChain-v1.0+-green.svg)](https://www.langchain.com/)
+[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-2.5%20Flash-orange.svg)](https://ai.google.dev/)
+[![ChromaDB](https://img.shields.io/badge/Vector%20Store-ChromaDB-purple.svg)](https://www.trychroma.com/)
 
-## How it works
-
-```
-PDF → Chunk → Embed (Gemini) → Store (ChromaDB)
-                                      ↓
-Question → Embed → Similarity Search → Top 3 Chunks → Gemini LLM → Answer
-```
-
-## Tech Stack
-
-- **LLM**: Google Gemini 2.5 Flash
-- **Embeddings**: Gemini Embedding 001
-- **Vector DB**: ChromaDB
-- **Orchestration**: LangChain LCEL
-- **PDF Loader**: LangChain PyPDFLoader
+An end-to-end AI document intelligence platform built with **Retrieval-Augmented Generation (RAG)** using **Google Gemini**, **LangChain**, and **ChromaDB**. Upload any document (research papers, reports, resumes, manuals) and query it in real-time with grounded citations and source verification.
 
 ---
 
-## Setup & Run
+## 🌟 Key Features
 
-### Step 1 — Clone the repo
+- **Interactive Web Interface**: Built with Streamlit for seamless drag-and-drop document upload and conversational interaction.
+- **RAG Architecture**: Prevents LLM hallucinations by retrieving exact vector chunks before generating answers.
+- **Real-Time Source Citations**: Shows chunk snippets and page numbers for transparent answers.
+- **Configurable Hyperparameters**: Custom controls for chunk size, chunk overlap, top-K retrieval, temperature, and Gemini model version.
+- **CLI & Web Support**: Run via terminal or as a full web app.
+- **1-Click Free Cloud Deployment**: Fully ready for Streamlit Community Cloud and Hugging Face Spaces.
+
+---
+
+## 🏗️ Architecture Flow
+
+```text
+[PDF Upload] ──► [PyPDFLoader] ──► [RecursiveCharacterTextSplitter]
+                                                │
+                                                ▼
+                                [Gemini Embedding 001]
+                                                │
+                                                ▼
+                                    [ChromaDB Vector Store]
+                                                │
+[User Question] ──► [Semantic Similarity Search] (Top-K Chunks)
+                                                │
+                                                ▼
+                         [Gemini 2.5 Flash LLM + Prompt Template]
+                                                │
+                                                ▼
+                             [Grounded Answer + Page Sources]
+```
+
+---
+
+## 🚀 Quick Start (Local)
+
+### 1. Clone & Setup
 ```bash
 git clone https://github.com/Saransh2005/StudyAnalyzer.git
 cd StudyAnalyzer
 ```
 
-### Step 2 — Create virtual environment & install dependencies
+### 2. Create Virtual Environment & Install Dependencies
 ```bash
 python3 -m venv venv
 source venv/bin/activate        # Mac/Linux
 # venv\Scripts\activate         # Windows
+
 pip install -r requirements.txt
 ```
 
-### Step 3 — Get a Gemini API key (free)
-1. Go to https://aistudio.google.com/app/apikey
-2. Click **Create API Key**
-3. Create a `.env` file in the project folder:
+### 3. Configure API Key
+Create a `.env` file in the project root:
+```env
+GOOGLE_API_KEY=your_gemini_api_key_here
 ```
-GOOGLE_API_KEY=your-api-key-here
-```
+*(Get a free API key at [Google AI Studio](https://aistudio.google.com/app/apikey))*
 
-### Step 4 — Run with your PDF
-```bash
-bash run.sh /path/to/your/file.pdf
-```
+### 4. Run the Application
 
-Or directly with Python:
+**Option A: Modern Web UI (Recommended)**
 ```bash
-python app.py /path/to/your/file.pdf
+streamlit run app.py
+```
+Open your browser at `http://localhost:8501`.
+
+**Option B: Terminal CLI**
+```bash
+./run.sh /path/to/your/file.pdf
+```
+or
+```bash
+python cli.py /path/to/your/file.pdf
 ```
 
 ---
 
-## Example
+## 🌐 Free Live Cloud Deployment (Streamlit Community Cloud)
 
-```
-PDF loaded. Ask questions (type 'exit' to quit).
+You can deploy this project live with a public URL in **2 minutes for free**:
 
-Q: What are my skills?
-A: Your skills include Python, React, LangChain, Docker...
-
-Q: Summarize this document
-A: This document is a resume for...
-
-Q: exit
-```
+1. Push your latest code to GitHub:
+   ```bash
+   git add .
+   git commit -m "Add interactive Streamlit Web UI and RAG pipeline"
+   git push origin main
+   ```
+2. Visit **[share.streamlit.io](https://share.streamlit.io/)** and sign in with your GitHub account.
+3. Click **"New app"** and select:
+   - **Repository**: `Saransh2005/StudyAnalyzer`
+   - **Branch**: `main`
+   - **Main file path**: `app.py`
+4. In **Advanced Settings → Secrets**, add:
+   ```toml
+   GOOGLE_API_KEY = "your_actual_gemini_api_key"
+   ```
+5. Click **Deploy!** Your app will be live at `https://<your-app-name>.streamlit.app`! 🎉
 
 ---
 
-## Notes
-- The first run takes ~30 seconds to embed the PDF into ChromaDB
-- Subsequent runs reuse the cached `chroma_db/` folder (faster)
-- Only answers based on the content in your PDF — no hallucinations from outside data
+## 🛠️ Tech Stack
+
+- **Large Language Model**: Google Gemini 2.5 Flash
+- **Embeddings**: Google Gemini Embedding 001
+- **Vector Database**: ChromaDB
+- **Orchestration**: LangChain LCEL (LangChain Expression Language)
+- **Document Ingestion**: LangChain PyPDFLoader & Character Text Splitters
+- **Frontend / Deployment**: Streamlit
